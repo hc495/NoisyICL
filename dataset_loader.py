@@ -24,14 +24,14 @@ class DatasetLoader():
     def divide(self, begin, end_not_include):
         pass
     
-    def default_training_division(self):
+    def default_testing_division(self):
         if self.max >= 512:
             self.divide(0, 512)
         else:
             self.divide(0, self.max // 2)
         return self
     
-    def default_testing_division(self):
+    def default_training_division(self):
         if self.max >= 1024:
             self.divide(self.max - 512, self.max)
         else:
@@ -68,10 +68,10 @@ class poem_sentiment(DatasetLoader):
         super().__init__()
         self.label_space = ['negative', 'neutral', 'positive', 'mix']
         self.label_mapping = {
-            -1: 'negative',
-            0: 'neutral',
-            1: 'positive',
-            2: 'mix'
+            0: 'negative',
+            1: 'neutral',
+            2: 'positive',
+            3: 'mix'
         }
         sp_dataset = datasets.load_dataset("poem_sentiment")
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])

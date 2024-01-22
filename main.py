@@ -43,12 +43,16 @@ elif dataset_name == 'GLUE-RTE' or dataset_name == 'RTE':
     dataset = dataset_loader.glue_rte()
 elif dataset_name == 'GLUE-MRPC' or dataset_name == 'MRPC':
     dataset = dataset_loader.glue_mrpc()
+    if 16 in demos:
+        demos.remove(16)
 elif dataset_name == 'Ethos':
     dataset = dataset_loader.ethos()
     dataset.cut_by_length()
+    if 16 in demos:
+        demos.remove(16)
 elif dataset_name == 'financial_phrasebank' or dataset_name == 'FP':
     dataset = dataset_loader.financial_phrasebank()
-elif dataset_name == 'GLUE-SST2' or dataset_name == 'sst2':
+elif dataset_name == 'GLUE-SST2' or dataset_name == 'SST2':
     dataset = dataset_loader.glue_sst2()
 elif dataset_name == 'tweet_eval_emotion' or dataset_name == 'TEE':
     dataset = dataset_loader.tweet_eval_emotion()
