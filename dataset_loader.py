@@ -42,7 +42,7 @@ class DatasetLoader():
 class hate_speech18(DatasetLoader):
     def __init__(self):
         super().__init__()
-        self.table = datasets.load_dataset("hate_speech18")['train']
+        self.table = datasets.load_dataset("hate_speech18")['train'].shuffle(seed=42)
         self.max = len(self.table)
         self.label_space = ['normal', 'hate', 'skip', 'relation']
         self.dataset_name = 'hate_speech18'
@@ -73,7 +73,7 @@ class poem_sentiment(DatasetLoader):
             2: 'positive',
             3: 'mix'
         }
-        sp_dataset = datasets.load_dataset("poem_sentiment")
+        sp_dataset = datasets.load_dataset("poem_sentiment").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])
         self.max = len(self.table)
         self.dataset_name = 'poem_sentiment'
@@ -93,7 +93,7 @@ class poem_sentiment(DatasetLoader):
 class SemEval2014_Restaurants(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("yqzheng/semeval2014_restaurants")
+        sp_dataset = datasets.load_dataset("yqzheng/semeval2014_restaurants").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['test']])
         self.max = len(self.table)
         self.label_space = ['negative', 'neutral', 'positive']
@@ -125,7 +125,7 @@ class SemEval2014_Restaurants(DatasetLoader):
 class SemEval2014_Laptops(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("yqzheng/semeval2014_laptops")
+        sp_dataset = datasets.load_dataset("yqzheng/semeval2014_laptops").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['test']])
         self.max = len(self.table)
         self.label_space = ['negative', 'neutral', 'positive']
@@ -156,7 +156,7 @@ class SemEval2014_Laptops(DatasetLoader):
 class glue_rte(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("glue", "rte")
+        sp_dataset = datasets.load_dataset("glue", "rte").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation']])
         self.max = len(self.table)
         self.label_space = ['include', 'neutral']
@@ -185,7 +185,7 @@ class glue_rte(DatasetLoader):
 class glue_mrpc(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("glue", "mrpc")
+        sp_dataset = datasets.load_dataset("glue", "mrpc").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation']])
         self.max = len(self.table)
         self.label_space = ['same', 'different']
@@ -214,7 +214,7 @@ class glue_mrpc(DatasetLoader):
 class ethos(DatasetLoader):
     def __init__(self):
         super().__init__()
-        self.table = datasets.load_dataset("ethos", "binary")['train']
+        self.table = datasets.load_dataset("ethos", "binary")['train'].shuffle(seed=42)
         self.max = len(self.table)
         self.label_space = ['normal', 'hate']
         self.label_mapping = {
@@ -255,7 +255,7 @@ class ethos(DatasetLoader):
 class financial_phrasebank(DatasetLoader):
     def __init__(self):
         super().__init__()
-        self.table = datasets.load_dataset("financial_phrasebank", "sentences_allagree")['train']
+        self.table = datasets.load_dataset("financial_phrasebank", "sentences_allagree")['train'].shuffle(seed=42)
         self.max = len(self.table)
         self.label_space = ['negative', 'neutral', 'positive']
         self.label_mapping = {
@@ -283,7 +283,7 @@ class financial_phrasebank(DatasetLoader):
 class glue_sst2(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("glue", "sst2")
+        sp_dataset = datasets.load_dataset("glue", "sst2").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation']])
         self.max = len(self.table)
         self.label_space = ['negative', 'positive']
@@ -311,7 +311,7 @@ class glue_sst2(DatasetLoader):
 class tweet_eval_emotion(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("tweet_eval", "emotion")
+        sp_dataset = datasets.load_dataset("tweet_eval", "emotion").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])
         self.max = len(self.table)
         self.label_space = ['anger', 'joy', 'positive', 'sad']
@@ -341,7 +341,7 @@ class tweet_eval_emotion(DatasetLoader):
 class tweet_eval_hate(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("tweet_eval", "hate")
+        sp_dataset = datasets.load_dataset("tweet_eval", "hate").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])
         self.max = len(self.table)
         self.label_space = ['normal', 'hate']
@@ -369,7 +369,7 @@ class tweet_eval_hate(DatasetLoader):
 class tweet_eval_sentiment(DatasetLoader):
     def __init__(self):
         super().__init__()
-        sp_dataset = datasets.load_dataset("tweet_eval", "sentiment")
+        sp_dataset = datasets.load_dataset("tweet_eval", "sentiment").shuffle(seed=42)
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])
         self.max = len(self.table)
         self.label_space = ['negative', 'neutral', 'positive']
