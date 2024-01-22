@@ -17,7 +17,6 @@ def ICLAcc_evaluate(
         dataset, 
         demos_amount, 
         tries=1, 
-        demos_style='basic'
     ):
     torch.cuda.empty_cache()
     ECE1_function = MulticlassCalibrationError(num_classes=len(dataset.label_space), n_bins=10, norm='l1')

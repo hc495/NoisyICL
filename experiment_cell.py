@@ -22,6 +22,7 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
 
     model_on_cpu = AutoModelForCausalLM.from_pretrained(pre_trained_model_name)
     tokenizer = AutoTokenizer.from_pretrained(pre_trained_model_name)
+    original_output_path = message_log.output_path
     for r in range(0, repeat):
         table_head = copy.deepcopy(demos)
         table_head.insert(0, tries)
@@ -34,10 +35,11 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
         ECE1_matrix = copy.deepcopy(acc_matrix)
     
         model_zero = interpolation.reset_parameter(model_on_cpu)
-    
+
+        message_log.output_path = original_output_path
         output_dirname = pre_trained_model_name.replace('/', '') + ', ' + dataset_loader.dataset_name
         output_dirname = message_log.new_folder(output_dirname)
-        message_log.output_path += output_dirname + '/'
+        message_log.output_path = original_output_path + output_dirname + '/'
     
         for i in range(0, len(one_minus_lambdas)):
             model = interpolation.model_linear_interpolation(model_on_cpu, model_zero, one_minus_lambdas[i]).cuda()
@@ -51,9 +53,9 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
                 F1_matrix[i+1][j+1] = MF1
                 ECE1_matrix[i+1][j+1] = ECE1
                 message_log.output_single_csv(output_table, extra_name = 'lambda: ' + str(1 - one_minus_lambdas[i]) + ', demos: ' + str(demos[j]))
-        del model
-        del model_zero
-        
+            del model
+
         message_log.output_single_csv(acc_matrix, extra_name = 'acc')
         message_log.output_single_csv(F1_matrix, extra_name = 'F1')
         message_log.output_single_csv(ECE1_matrix, extra_name = 'ECE1')
+        del model_zero
