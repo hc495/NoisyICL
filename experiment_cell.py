@@ -4,7 +4,7 @@ import evaluate
 import message_log
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_loader, one_minus_lambdas=[1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0], tries=10, demos=[32,16,8,4,2,1,0], repeat = 5):
+def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_loader, one_minus_lambdas=[1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0], tries=10, demos=[16,8,4,2,1,0], repeat = 5):
     # Main experiment of this paper. 
     # Parameter: 
     #   pre_trained_model_name: pre-trained model name from the Huggingface
@@ -22,23 +22,23 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
 
     model_on_cpu = AutoModelForCausalLM.from_pretrained(pre_trained_model_name)
     tokenizer = AutoTokenizer.from_pretrained(pre_trained_model_name)
-    table_head = copy.deepcopy(demos)
-    table_head.insert(0, tries)
-    acc_matrix = [table_head]
-    for i in range(0, len(one_minus_lambdas)):
-        table_head = copy.deepcopy(table_head)
-        table_head[0] = 1 - one_minus_lambdas[i]
-        acc_matrix.append(table_head)
-    F1_matrix = copy.deepcopy(acc_matrix)
-    ECE1_matrix = copy.deepcopy(acc_matrix)
-    
-    model_zero = interpolation.reset_parameter(model_on_cpu)
-    
-    output_dirname = pre_trained_model_name + ', ' + dataset_loader.dataset_name
-    output_dirname = message_log.new_folder(output_dirname)
-    message_log.output_path += output_dirname + '/'
-    
     for r in range(0, repeat):
+        table_head = copy.deepcopy(demos)
+        table_head.insert(0, tries)
+        acc_matrix = [table_head]
+        for i in range(0, len(one_minus_lambdas)):
+            table_head = copy.deepcopy(table_head)
+            table_head[0] = 1 - one_minus_lambdas[i]
+            acc_matrix.append(table_head)
+        F1_matrix = copy.deepcopy(acc_matrix)
+        ECE1_matrix = copy.deepcopy(acc_matrix)
+    
+        model_zero = interpolation.reset_parameter(model_on_cpu)
+    
+        output_dirname = pre_trained_model_name + ', ' + dataset_loader.dataset_name
+        output_dirname = message_log.new_folder(output_dirname)
+        message_log.output_path += output_dirname + '/'
+    
         for i in range(0, len(one_minus_lambdas)):
             model = interpolation.model_linear_interpolation(model_on_cpu, model_zero, one_minus_lambdas[i]).cuda()
             for param in model.parameters():
@@ -52,7 +52,8 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
                 ECE1_matrix[i+1][j+1] = ECE1
                 message_log.output_single_csv(output_table, extra_name = 'lambda: ' + str(1 - one_minus_lambdas[i]) + ', demos: ' + str(demos[j]))
         del model
+        del model_zero
         
-    message_log.output_single_csv(acc_matrix, extra_name = 'acc')
-    message_log.output_single_csv(F1_matrix, extra_name = 'F1')
-    message_log.output_single_csv(ECE1_matrix, extra_name = 'ECE1')
+        message_log.output_single_csv(acc_matrix, extra_name = 'acc')
+        message_log.output_single_csv(F1_matrix, extra_name = 'F1')
+        message_log.output_single_csv(ECE1_matrix, extra_name = 'ECE1')
