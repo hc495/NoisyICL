@@ -45,6 +45,7 @@ elif dataset_name == 'GLUE-MRPC' or dataset_name == 'MRPC':
     dataset = dataset_loader.glue_mrpc()
 elif dataset_name == 'Ethos':
     dataset = dataset_loader.ethos()
+    dataset.cut_by_length()
 elif dataset_name == 'financial_phrasebank' or dataset_name == 'FP':
     dataset = dataset_loader.financial_phrasebank()
 elif dataset_name == 'GLUE-SST2' or dataset_name == 'sst2':
