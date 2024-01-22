@@ -35,7 +35,7 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
     
         model_zero = interpolation.reset_parameter(model_on_cpu)
     
-        output_dirname = pre_trained_model_name + ', ' + dataset_loader.dataset_name
+        output_dirname = pre_trained_model_name.replace('/', '') + ', ' + dataset_loader.dataset_name
         output_dirname = message_log.new_folder(output_dirname)
         message_log.output_path += output_dirname + '/'
     
