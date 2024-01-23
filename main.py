@@ -10,8 +10,9 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-m', '--model', action = "store", type=str, default='gpt2', help='pre-trained model name from the Huggingface')
 parser.add_argument('-d', '--dataset', action = "store", type=str, default='hate_speech18', help='dataset name from the Huggingface')
-parser.add_argument('-v', '--validation', action = "store_true", help='validation or not (if not, test, and you must give a lambda to be tested)')
-parser.add_argument('-l', '--noisy_intensity', action = "store", type=float, default=0, help='lambda (not 1-lambda)')
+parser.add_argument('-v', '--validation', action = "store_true", help='use validation set or not (if not -v and not -te, we use the whole data)')
+parser.add_argument('-te', '--test', action = "store_true", help='use test set or not (if not -v and not -te, we use the whole data, if both -v and -te, we use teh -v)')
+parser.add_argument('-l', '--noisy_intensities', action = "store", nargs='*', type=float, default=None, help='lambda defined in the paper. If not give, we do searching.')
 parser.add_argument('-e', '--experiment', action = "store", type=str, default='main', help='experiment name')
 parser.add_argument('-t', '--tries', action = "store", type=int, default=2, help='tries')
 parser.add_argument('-r', '--repeat', action = "store", type=int, default=5, help='repeat')
@@ -20,13 +21,17 @@ args = parser.parse_args()
 
 # Model selection:
 model_name = args.model
-demos = []
 if model_name == 'gptj' or model_name == 'GPT-J' or model_name == 'gpt-j':
     model_name = 'EleutherAI/gpt-j-6B'
-    demos = [16,8,4,2,1,0]
 elif model_name == 'gpt-2' or model_name == 'GPT2':
     model_name = 'gpt2'
+
+# Demos number selection:
+demos = []
+if model_name == 'gpt2':
     demos = [4,2,1,0]
+elif model_name == 'EleutherAI/gpt-j-6B':
+    demos = [16,8,4,2,1,0]
 
 # Dataset selection:
 dataset = None
@@ -64,26 +69,24 @@ elif dataset_name == 'tweet_eval_hate' or dataset_name == 'TEH':
 # Dataset dividing:
 if args.validation:
     dataset.default_training_division()
-else:
+
+if args.test and not args.validation:
     dataset.default_testing_division()
 
+# Noisy intensity selection
+one_minus_lambdas = [0.7, 0.8, 0.9, 1, 0.98, 0.96, 0.94, 0.92, 0.982, 0.984, 0.986, 0.988, 0.99, 0.992, 0.994, 0.996, 0.998]
+if args.noisy_intensities is not None:
+    one_minus_lambdas = args.noisy_intensities
+    for i in range(0, len(one_minus_lambdas)):
+        one_minus_lambdas[i] = 1 - one_minus_lambdas[i]
+
 # Experiment:
-if args.experiment == 'main' and args.validation:
+if args.experiment == 'main':
     experiment_cell.main_experiment(
         model_name, 
         model_name, 
         dataset, 
-        one_minus_lambdas = [0.7, 0.8, 0.9, 1, 0.98, 0.96, 0.94, 0.92, 0.982, 0.984, 0.986, 0.988, 0.99, 0.992, 0.994, 0.996, 0.998], 
-        tries = args.tries, 
-        demos = demos, 
-        repeat = args.repeat
-    )
-elif args.experiment == 'main' and not args.validation:
-    experiment_cell.main_experiment(
-        model_name, 
-        model_name, 
-        dataset, 
-        one_minus_lambdas = [args.noisy_intensity], 
+        one_minus_lambdas = one_minus_lambdas, 
         tries = args.tries, 
         demos = demos, 
         repeat = args.repeat

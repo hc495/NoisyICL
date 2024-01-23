@@ -47,12 +47,12 @@ def main_experiment(pre_trained_model_name, pre_trained_tokenizer_name, dataset_
                 param.requires_grad = False
 
             for j in range(0, len(demos)):
-                print("lambda: " + str(1 - one_minus_lambdas[i]) + "  demos: " + str(demos[j]))
+                print("lambda: " + str(1 - one_minus_lambdas[i]) + "  demos " + str(demos[j]))
                 ACC, MF1, ECE1, output_table = evaluate.ICLAcc_evaluate(model, tokenizer, dataset_loader, demos[j], tries)
                 acc_matrix[i+1][j+1] = ACC
                 F1_matrix[i+1][j+1] = MF1
                 ECE1_matrix[i+1][j+1] = ECE1
-                message_log.output_single_csv(output_table, extra_name = 'lambda: ' + str(1 - one_minus_lambdas[i]) + ', demos: ' + str(demos[j]))
+                message_log.output_single_csv(output_table, extra_name = 'lambda ' + str(1 - one_minus_lambdas[i]) + ', demos ' + str(demos[j]))
             del model
 
         message_log.output_single_csv(acc_matrix, extra_name = 'acc')
