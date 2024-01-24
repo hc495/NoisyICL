@@ -12,12 +12,12 @@ def softmax(x):
     return f_x
 
 def ICLAcc_evaluate(
-        model, 
-        tokenizer, 
-        dataset, 
-        demos_amount, 
-        tries=1, 
-    ):
+    model, 
+    tokenizer, 
+    dataset, 
+    demos_amount, 
+    tries=1, 
+):
     torch.cuda.empty_cache()
     ECE1_function = MulticlassCalibrationError(num_classes=len(dataset.label_space), n_bins=10, norm='l1')
     total_count = 0

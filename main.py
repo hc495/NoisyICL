@@ -10,6 +10,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-m', '--model', action = "store", type=str, default='gpt2', help='pre-trained model name from the Huggingface')
 parser.add_argument('-d', '--dataset', action = "store", type=str, default='hate_speech18', help='dataset name from the Huggingface')
+parser.add_argument('-de', '--demos', action = "store", nargs='*', type=int, default=None, help='demos number')
 parser.add_argument('-v', '--validation', action = "store_true", help='use validation set or not (if not -v and not -te, we use the whole data)')
 parser.add_argument('-te', '--test', action = "store_true", help='use test set or not (if not -v and not -te, we use the whole data, if both -v and -te, we use teh -v)')
 parser.add_argument('-l', '--noisy_intensities', action = "store", nargs='*', type=float, default=None, help='lambda defined in the paper. If not give, we do searching.')
@@ -27,11 +28,15 @@ elif model_name == 'gpt-2' or model_name == 'GPT2':
     model_name = 'gpt2'
 
 # Demos number selection:
-demos = []
-if model_name == 'gpt2':
-    demos = [4,2,1,0]
-elif model_name == 'EleutherAI/gpt-j-6B':
-    demos = [16,8,4,2,1,0]
+demos = None
+if args.demos is not None:
+    demos = args.demos
+
+if demos is None:
+    if model_name == 'gpt2':
+        demos = [4,2,1,0]
+    elif model_name == 'EleutherAI/gpt-j-6B':
+        demos = [16,8,4,2,1,0]
 
 # Dataset selection:
 dataset = None
@@ -83,6 +88,16 @@ if args.noisy_intensities is not None:
 # Experiment:
 if args.experiment == 'main':
     experiment_cell.main_experiment(
+        model_name, 
+        model_name, 
+        dataset, 
+        one_minus_lambdas = one_minus_lambdas, 
+        tries = args.tries, 
+        demos = demos, 
+        repeat = args.repeat
+    )
+elif args.experiment == 'ablation':
+    experiment_cell.ablation_study(
         model_name, 
         model_name, 
         dataset, 

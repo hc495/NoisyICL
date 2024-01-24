@@ -37,6 +37,9 @@ class DatasetLoader():
         else:
             self.divide(512, self.max)
         return self
+    
+    def get_empty_input(self):
+        return self.get(None)
 
 
 class hate_speech18(DatasetLoader):
@@ -48,6 +51,8 @@ class hate_speech18(DatasetLoader):
         self.dataset_name = 'hate_speech18'
 
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['text'][index]
         label = self.label_space[self.table['label'][index]]
         if self.new_label_mapping != None:
@@ -87,6 +92,8 @@ class poem_sentiment(DatasetLoader):
         return
     
     def get(self, index):
+        if index is None:
+            return ("", "")
         return (self.table['verse_text'][index], self.label_mapping[self.table['label'][index]])
 
 
@@ -113,6 +120,8 @@ class SemEval2014_Restaurants(DatasetLoader):
         return
     
     def get(self, index):
+        if index is None:
+            return (", Aspect: ", "")
         text = self.table['text'][index]
         aspect = self.table['aspect'][index]
         label = self.label_mapping[self.table['label'][index]]
@@ -145,6 +154,8 @@ class SemEval2014_Laptops(DatasetLoader):
         return
     
     def get(self, index):
+        if index is None:
+            return (", Aspect: ", "")
         text = self.table['text'][index]
         aspect = self.table['aspect'][index]
         label = self.label_mapping[self.table['label'][index]]
@@ -167,6 +178,8 @@ class glue_rte(DatasetLoader):
         self.dataset_name = 'GLUE-RTE'
     
     def get(self, index):
+        if index is None:
+            return (", Target: ", "")
         text1 = self.table['sentence1'][index]
         text2 = self.table['sentence2'][index]
         label_index = self.table['label'][index]
@@ -196,6 +209,8 @@ class glue_mrpc(DatasetLoader):
         self.dataset_name = 'GLUE-MRPC'
     
     def get(self, index):
+        if index is None:
+            return (", Text 2: ", "")
         text1 = self.table['sentence1'][index]
         text2 = self.table['sentence2'][index]
         label_index = self.table['label'][index]
@@ -238,6 +253,8 @@ class ethos(DatasetLoader):
         self.max = len(self.table)
     
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['text'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
@@ -266,6 +283,8 @@ class financial_phrasebank(DatasetLoader):
         self.dataset_name = 'financial_phrasebank'
     
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['sentence'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
@@ -294,6 +313,8 @@ class glue_sst2(DatasetLoader):
         self.dataset_name = 'GLUE-SST2'
     
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['sentence'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
@@ -324,6 +345,8 @@ class tweet_eval_emotion(DatasetLoader):
         self.dataset_name = 'Tweet-Emotion'
 
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['text'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
@@ -352,6 +375,8 @@ class tweet_eval_hate(DatasetLoader):
         self.dataset_name = 'Tweet-Hate'
 
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['text'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
@@ -381,6 +406,8 @@ class tweet_eval_sentiment(DatasetLoader):
         self.dataset_name = 'Tweet-Sentiment'
 
     def get(self, index):
+        if index is None:
+            return ("", "")
         text = self.table['text'][index]
         label_index = self.table['label'][index]
         label = self.label_mapping[label_index]
