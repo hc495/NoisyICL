@@ -8,6 +8,7 @@ class DatasetLoader():
         self.new_label_mapping = None
         self.new_label_space = None
         self.max = None
+        self.neutral_label = None
         pass
     
     def get(self, index: int) -> tuple:
@@ -82,6 +83,7 @@ class poem_sentiment(DatasetLoader):
         self.table = datasets.concatenate_datasets([sp_dataset['train'], sp_dataset['validation'], sp_dataset['test']])
         self.max = len(self.table)
         self.dataset_name = 'poem_sentiment'
+        self.neutral_label = 1
     
     def get_max(self):
         return self.max
@@ -110,6 +112,7 @@ class SemEval2014_Restaurants(DatasetLoader):
             1: 'positive'
         }
         self.dataset_name = 'SemEval 2014-Task 4 Restaurants'
+        self.neutral_label = 1
     
     def get_max(self):
         return self.max
@@ -144,6 +147,7 @@ class SemEval2014_Laptops(DatasetLoader):
             1: 'positive'
         }
         self.dataset_name = 'SemEval 2014-Task 4 Laptops'
+        self.neutral_label = 1
     
     def get_max(self):
         return self.max
@@ -281,6 +285,7 @@ class financial_phrasebank(DatasetLoader):
             2: 'positive'
         }
         self.dataset_name = 'financial_phrasebank'
+        self.neutral_label = 1
     
     def get(self, index):
         if index is None:
@@ -404,6 +409,7 @@ class tweet_eval_sentiment(DatasetLoader):
             2: 'positive'
         }
         self.dataset_name = 'Tweet-Sentiment'
+        self.neutral_label = 1
 
     def get(self, index):
         if index is None:
