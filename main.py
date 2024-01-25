@@ -38,6 +38,9 @@ if demos is None:
     elif model_name == 'EleutherAI/gpt-j-6B':
         demos = [16,8,4,2,1,0]
 
+if not isinstance(demos, list):
+    demos = [demos]
+
 # Dataset selection:
 dataset = None
 dataset_name = args.dataset
@@ -85,6 +88,9 @@ if args.noisy_intensities is not None:
     for i in range(0, len(one_minus_lambdas)):
         one_minus_lambdas[i] = 1 - one_minus_lambdas[i]
 
+if not isinstance(one_minus_lambdas, list):
+    one_minus_lambdas = [one_minus_lambdas]
+
 # Experiment:
 if args.experiment == 'main':
     experiment_cell.main_experiment(
@@ -103,6 +109,16 @@ elif args.experiment == 'ablation':
         dataset, 
         one_minus_lambdas = one_minus_lambdas, 
         tries = args.tries, 
+        demos = demos, 
+        repeat = args.repeat
+    )
+elif args.experiment == 'entropy':
+    experiment_cell.entropy_with_empty_query(
+        model_name, 
+        model_name, 
+        dataset, 
+        one_minus_lambdas = one_minus_lambdas, 
+        total_tries = args.tries, 
         demos = demos, 
         repeat = args.repeat
     )

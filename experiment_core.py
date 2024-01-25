@@ -95,4 +95,4 @@ def empty_query_entropy_evaluate(
         res = entropy(label_space_p)
         output_table.append(res / np.log(len(dataset.label_space)))
         del(tokenized_input)
-    return np.mean(output_table), np.std(output_table), output_table
+    return np.mean(output_table), np.std(output_table), [output_table]
