@@ -128,4 +128,4 @@ def empty_query_entropy_evaluate(
     for i in range(0, len(prediction_count)):
         prediction_count[i] /= total_tries
 
-    return entropy(prediction_count)  / np.log(len(dataset.prediction_count))
+    return entropy(prediction_count)  / np.log(len(prediction_count))
