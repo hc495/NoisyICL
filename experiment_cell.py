@@ -132,38 +132,6 @@ def ablation_study(
         message_log.output_single_csv(ECE1_matrix, extra_name = 'ECE1')
 
 
-# def entropy_with_empty_query(
-#     pre_trained_model_name, 
-#     pre_trained_tokenizer_name, 
-#     dataset_loader, 
-#     one_minus_lambdas=[1,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1,0], 
-#     total_tries=1024, 
-#     demos=[16,8,4,2,1,0], 
-#     repeat = 5
-# ):
-#     model_on_cpu = AutoModelForCausalLM.from_pretrained(pre_trained_model_name)
-#     tokenizer = AutoTokenizer.from_pretrained(pre_trained_tokenizer_name)
-#     original_output_path = message_log.output_path
-#     for r in range(0, repeat):
-#         message_log.output_path = original_output_path
-#         output_dirname = pre_trained_model_name.replace('/', '') + ', ' + dataset_loader.dataset_name + ", entropy"
-#         output_dirname = message_log.new_folder(output_dirname)
-#         message_log.output_path = original_output_path + output_dirname + '/'
-
-#         model_zero = NoisyICL.reset_parameter(model_on_cpu)
-    
-#         for i in range(0, len(one_minus_lambdas)):
-#             model = NoisyICL.model_linear_interpolation(model_on_cpu, model_zero, one_minus_lambdas[i]).cuda()
-#             for param in model.parameters():
-#                 param.requires_grad = False
-
-#             for j in range(0, len(demos)):
-#                 print("lambda: " + str(1 - one_minus_lambdas[i]) + "  demos " + str(demos[j]))
-#                 mean, std, output_table = experiment_core.empty_query_entropy_evaluate(model, tokenizer, dataset_loader, demos[j], total_tries)
-#                 message_log.output_single_csv(output_table, extra_name = 'mean ' + str(mean) + ', lambda ' + str(1 - one_minus_lambdas[i]) + ', demos ' + str(demos[j]))
-#             del model
-
-
 def entropy_with_empty_query(
     pre_trained_model_name, 
     pre_trained_tokenizer_name, 
